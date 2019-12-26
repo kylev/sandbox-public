@@ -9,5 +9,7 @@ services:
   opsbot:
     build:
       context: opsbot/
+      args:
+        DEVELOPER_MODE: "true"
     volumes:
       - ./opsbot:/opt/app

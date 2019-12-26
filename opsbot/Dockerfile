@@ -2,7 +2,10 @@ FROM python:3.8.0
 
 WORKDIR /opt/app
 
-COPY requirements.txt ./
-RUN pip install -r  requirements.txt
+# Developer-only style install. Lambda is not Docker-deployed.
+COPY requirements.txt setup.py ./
+RUN \
+        pip install --no-cache-dir -r requirements.txt && \
+        pip install --no-cache-dir -e .
 
 COPY . ./
