@@ -94,7 +94,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            aws lambda update-function-code --function-name opsbot_lambda --publish --s3-key opsbot/lambda-${CIRCLE_SHA1}.zip
+            aws lambda update-function-code --function-name opsbot_lambda --publish --s3-bucket kylev-utility --s3-key opsbot/lambda-${CIRCLE_SHA1}.zip
 
 workflows:
   version: 2

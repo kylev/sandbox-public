@@ -15,6 +15,7 @@ data "aws_iam_policy_document" "circleci" {
     sid = "OpsbotArtifactsKeyspace"
 
     actions = [
+      "s3:GetObject",
       "s3:PutObject",
     ]
 

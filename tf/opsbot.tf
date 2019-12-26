@@ -24,7 +24,6 @@ resource "aws_lambda_function" "opsbot_function" {
 }
 
 resource "aws_iam_role" "opsbot_exec_role" {
-  name        = "${var.function_name}_exec"
   path        = "/"
   description = "Allows Lambda Function to call AWS services on your behalf."
 
