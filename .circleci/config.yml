@@ -6,9 +6,12 @@ jobs:
       - image: circleci/ruby:2.6.5
     steps:
       - checkout
-      - run: cd rubyapp/
-      - run: bundle install
-      - run: bundle exec rspec
+      - run:
+          name: All-in-One
+          command: |
+            cd rubyapp/
+            bundle install
+            bundle exec rspec
 
 workflows:
   version: 2
