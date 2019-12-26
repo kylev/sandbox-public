@@ -11,7 +11,7 @@ variable "runtime" {
 }
 
 resource "aws_lambda_function" "opsbot_function" {
-  role             = aws_iam_role.opsbot_exec_role.arn
+  role             = aws_iam_role.opsbot_role.arn
   handler          = var.handler
   runtime          = var.runtime
   function_name    = var.function_name
@@ -23,7 +23,7 @@ resource "aws_lambda_function" "opsbot_function" {
   }
 }
 
-data "aws_iam_policy_document" "opsbot_policy_doc" {
+data "aws_iam_policy_document" "opsbot_assume_policy_doc" {
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -34,8 +34,32 @@ data "aws_iam_policy_document" "opsbot_policy_doc" {
   }
 }
 
-resource "aws_iam_role" "opsbot_exec_role" {
+data "aws_iam_policy_document" "opsbot_exec_policy_doc" {
+  statement {
+    sid = "CloudwatchLogging"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+
+    resources = ["arn:aws:logs:*:*:*"]
+  }
+}
+
+resource "aws_iam_policy" "opsbot_exec_policy" {
+  policy = data.aws_iam_policy_document.opsbot_exec_policy_doc.json
+}
+
+resource "aws_iam_role" "opsbot_role" {
+  name               = "OpsbotRole"
   path               = "/"
-  description        = "Allows Lambda Function to call AWS services on your behalf."
-  assume_role_policy = data.aws_iam_policy_document.opsbot_policy_doc.json
+  description        = "Things Opsbot is allowed to do."
+  assume_role_policy = data.aws_iam_policy_document.opsbot_assume_policy_doc.json
+}
+
+resource "aws_iam_role_policy_attachment" "opsbot_role_attachment" {
+  role       = aws_iam_role.opsbot_role.name
+  policy_arn = aws_iam_policy.opsbot_exec_policy.arn
 }
