@@ -107,7 +107,9 @@ workflows:
       - opsbot_cd:
           filters:
             branches:
-              only: kv_cd
+              only:
+                - master
+                - /^kv_/
           requires:
             - opsbot_test
             - opsbot_package
