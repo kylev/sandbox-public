@@ -17,6 +17,10 @@ resource "aws_lambda_function" "lambda_function" {
   function_name    = var.function_name
   s3_bucket        = "kylev-utility"
   s3_key           = "opsbot/lambda.zip"
+
+  lifecycle {
+    ignore_changes = [s3_key]
+  }
 }
 
 resource "aws_iam_role" "lambda_exec_role" {
