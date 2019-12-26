@@ -12,9 +12,22 @@ jobs:
             cd rubyapp/
             bundle install
             bundle exec rspec
-
+  opsbot:
+    docker:
+      - image: circleci/python:3.8.0
+    steps:
+      - checkout
+      - run:
+          name: All-in-One
+          command: |
+            cd opsbot
+            pip install -r requirements.txt
+            nosetests --with-xunit
+      - store_test_results:
+          path: opsbot/nosetests.xml
 workflows:
   version: 2
   ci:
     jobs:
       - rubyapp
+      - opsbot
