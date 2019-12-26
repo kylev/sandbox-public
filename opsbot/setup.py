@@ -6,5 +6,5 @@ setup(
     packages=find_packages(),
     install_requires=['boto3>=1.10', 'nose'],
     test_suite='nose.collector',
-    tests_require=['nose'],
+    tests_require=['moto', 'nose'],
 )
