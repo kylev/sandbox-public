@@ -54,7 +54,7 @@ jobs:
 
   rubyapp_package:
     docker:
-      - image: circleci/python
+      - image: circleci/python:3
     steps:
       - setup_remote_docker
       - checkout
@@ -64,7 +64,7 @@ jobs:
 
   opsbot_package:
     docker:
-      - image: circleci/python
+      - image: circleci/python:3
     steps:
       - checkout
       - restore_cache:
@@ -87,7 +87,7 @@ jobs:
 
   opsbot_cd:
     docker:
-      - image: circleci/python
+      - image: circleci/python:3
     steps:
       - aws-cli/install
       - aws-cli/setup
