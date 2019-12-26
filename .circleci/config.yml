@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Test
           command: |
-            cd rubyapp/
+            cd rubyapp
             bundle check --path vendor/bundle || bundle install --path vendor/bundle
 
             mkdir -p ~/results
@@ -63,6 +63,14 @@ jobs:
       - image: circleci/python:3.8.0
     steps:
       - checkout
+      - run:
+          command: |
+            cd opsbot
+            pip install -r requirements.txt -t .package
+
+            zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip opsbot
+            (cd .package ; zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip .)
+
 
 workflows:
   version: 2
