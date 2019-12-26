@@ -1,11 +1,12 @@
 version: 2.1
 
 jobs:
-  test:
+  rubyapp:
     docker:
       - image: circleci/ruby:2.6.5
     steps:
       - checkout
+      - run: cd rubyapp/
       - run: bundle install
       - run: bundle exec rspec
 
@@ -13,4 +14,4 @@ workflows:
   version: 2
   ci:
     jobs:
-      - test
+      - rubyapp
