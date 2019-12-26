@@ -67,11 +67,17 @@ jobs:
       - image: circleci/python
     steps:
       - checkout
+      - restore_cache:
+          key: sandbox-opsbot-package-{{ checksum "opsbot/requirements.txt" }}-{{ checksum "opsbot/setup.py" }}
       - run:
           name: Zip for Lambda
           command: |
             cd opsbot
             make package
+      - save_cache:
+          key: sandbox-opsbot-package-{{ checksum "opsbot/requirements.txt" }}-{{ checksum "opsbot/setup.py" }}
+          paths:
+            - opsbot/.package
       - run:
           name: Examine
           command: unzip -l ~/lambda.zip
