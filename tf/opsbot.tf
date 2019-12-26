@@ -23,22 +23,19 @@ resource "aws_lambda_function" "opsbot_function" {
   }
 }
 
-resource "aws_iam_role" "opsbot_exec_role" {
-  path        = "/"
-  description = "Allows Lambda Function to call AWS services on your behalf."
+data "aws_iam_policy_document" "opsbot_policy_doc" {
+  statement {
+    actions = ["sts:AssumeRole"]
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
     }
-  ]
+  }
 }
-EOF
+
+resource "aws_iam_role" "opsbot_exec_role" {
+  path               = "/"
+  description        = "Allows Lambda Function to call AWS services on your behalf."
+  assume_role_policy = data.aws_iam_policy_document.opsbot_policy_doc.json
 }
