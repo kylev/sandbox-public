@@ -10,8 +10,8 @@ variable "runtime" {
   default = "python3.8"
 }
 
-resource "aws_lambda_function" "lambda_function" {
-  role             = aws_iam_role.lambda_exec_role.arn
+resource "aws_lambda_function" "opsbot_function" {
+  role             = aws_iam_role.opsbot_exec_role.arn
   handler          = var.handler
   runtime          = var.runtime
   function_name    = var.function_name
@@ -23,7 +23,7 @@ resource "aws_lambda_function" "lambda_function" {
   }
 }
 
-resource "aws_iam_role" "lambda_exec_role" {
+resource "aws_iam_role" "opsbot_exec_role" {
   name        = "${var.function_name}_exec"
   path        = "/"
   description = "Allows Lambda Function to call AWS services on your behalf."

@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "circleci" {
   statement {
-    sid = "bucket"
+    sid = "OpsbotArtifactsBucket"
 
     actions = [
       "s3:GetBucketLocation",
@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "circleci" {
   }
 
   statement {
-    sid = "upload"
+    sid = "OpsbotArtifactsKeyspace"
 
     actions = [
       "s3:PutObject",
@@ -20,6 +20,18 @@ data "aws_iam_policy_document" "circleci" {
 
     resources = [
       "arn:aws:s3:::kylev-utility/opsbot/*",
+    ]
+  }
+
+  statement {
+    sid = "OpsbotDeploy"
+
+    actions = [
+      "lambda:UpdateFunctionCode",
+    ]
+
+    resources = [
+      aws_lambda_function.opsbot_function.arn
     ]
   }
 }
