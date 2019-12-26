@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  aws-s3: circleci/aws-s3@1.0.12
   docker: circleci/docker@0.5.20
 
 jobs:
@@ -69,15 +70,14 @@ jobs:
           name: Zip for Lambda
           command: |
             cd opsbot
-
-            pip install -t .package -r requirements.txt
-            pip install -t .package .
-            (cd .package ; zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip .)
-
-            zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip opsbot
+            make package
       - run:
           name: Examine
-          command: unzip -l  ~/opsbot-${CIRCLE_SHA1}.zip
+          command: unzip -l ~/lambda.zip
+      - aws-s3/copy:
+          from: ~/lambda.zip
+          to: s3://kylev-utility/opsbot/lambda.zip
+          arguments: --dryrun
 
   cd:
     docker:
