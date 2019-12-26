@@ -65,12 +65,16 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Zip for Lambda
           command: |
             cd opsbot
             pip install -r requirements.txt -t .package
 
             zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip opsbot
             (cd .package ; zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip .)
+      - run:
+          name: Examine
+          command: unzip -l  ~/opsbot-${CIRCLE_SHA1}.zip
 
   cd:
     docker:
