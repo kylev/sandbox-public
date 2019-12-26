@@ -33,7 +33,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: sandbox-opsbot-{{ checksum "opsbot/requirements.txt" }}
+          key: sandbox-opsbot-{{ checksum "opsbot/requirements.txt" }}-{{ checksum "opsbot/setup.py" }}
       - run:
           name: nosetests
           command: |
@@ -44,7 +44,7 @@ jobs:
             mkdir -p ~/results/nose
             nosetests --with-xunit --xunit-file ~/results/nose.xml
       - save_cache:
-          key: sandbox-opsbot-{{ checksum "opsbot/requirements.txt" }}
+          key: sandbox-opsbot-{{ checksum "opsbot/requirements.txt" }}-{{ checksum "opsbot/setup.py" }}
           paths:
             - ~/.cache/pip
             - ~/.local
