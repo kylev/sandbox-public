@@ -51,8 +51,9 @@ jobs:
 
   rubyapp_package:
     docker:
-      - image: circleci/python:3.8.0
+      - image: circleci/python
     steps:
+      - setup_remote_docker
       - checkout
       - docker/build:
           image: kylev/sandbox-rubyapp
@@ -60,7 +61,7 @@ jobs:
 
   opsbot_package:
     docker:
-      - image: circleci/python:3.8.0
+      - image: circleci/python
     steps:
       - checkout
       - run:
@@ -71,6 +72,15 @@ jobs:
             zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip opsbot
             (cd .package ; zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip .)
 
+  cd:
+    docker:
+      - image: circleci/python
+    steps:
+      - run:
+          name: TODO Deploy?
+          command: |
+            echo Lots to do here.
+
 
 workflows:
   version: 2
@@ -79,3 +89,10 @@ workflows:
       - rubyapp
       - opsbot
       - rubyapp_package
+      - opsbot_package
+      - cd:
+          requires:
+            - rubyapp
+            - opsbot
+            - rubyapp_package
+            - opsbot_package
