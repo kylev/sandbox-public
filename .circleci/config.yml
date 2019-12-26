@@ -4,7 +4,7 @@ orbs:
   docker: circleci/docker@0.5.20
 
 jobs:
-  rubyapp:
+  rubyapp_test:
     docker:
       - image: circleci/ruby:2.6.5
     steps:
@@ -26,7 +26,7 @@ jobs:
       - store_test_results:
           path: ~/results
 
-  opsbot:
+  opsbot_test:
     docker:
       - image: circleci/python:3.8.0
     steps:
@@ -38,6 +38,7 @@ jobs:
           command: |
             cd opsbot
             pip install --user -r requirements.txt
+            pip install --user -e .
 
             mkdir -p ~/results/nose
             nosetests --with-xunit --xunit-file ~/results/nose.xml
@@ -68,11 +69,12 @@ jobs:
           name: Zip for Lambda
           command: |
             cd opsbot
+
             pip install -t .package -r requirements.txt
             pip install -t .package .
+            (cd .package ; zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip .)
 
             zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip opsbot
-            (cd .package ; zip -q9r ~/opsbot-${CIRCLE_SHA1}.zip .)
       - run:
           name: Examine
           command: unzip -l  ~/opsbot-${CIRCLE_SHA1}.zip
@@ -91,13 +93,13 @@ workflows:
   version: 2
   ci:
     jobs:
-      - rubyapp
-      - opsbot
+      - rubyapp_test
+      - opsbot_test
       - rubyapp_package
       - opsbot_package
       - cd:
           requires:
-            - rubyapp
-            - opsbot
+            - rubyapp_test
+            - opsbot_test
             - rubyapp_package
             - opsbot_package
