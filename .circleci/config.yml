@@ -12,10 +12,10 @@ jobs:
             cd rubyapp/
             bundle install
 
-            mkdir ~/results
-            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/results/rspec.xml
+            mkdir -p ~/results/rspec
+            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/results/rspec/results.xml
       - store_test_results:
-          path: ~/results
+          path: ~/results/rspec/results.xml
 
   opsbot:
     docker:
@@ -28,8 +28,8 @@ jobs:
             cd opsbot
             pip install --user -r requirements.txt
 
-            mkdir ~/results/
-            nosetests --with-xunit --xunit-file ~/results/nose.xml
+            mkdir -p ~/results/nose
+            nosetests --with-xunit --xunit-file ~/results/nose/results.xml
       - store_test_results:
           path: ~/results
 workflows:
