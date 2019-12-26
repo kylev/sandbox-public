@@ -11,7 +11,10 @@ jobs:
           command: |
             cd rubyapp/
             bundle install
-            bundle exec rspec
+            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
+      - store_test_results:
+          path: ~/rspec
+
   opsbot:
     docker:
       - image: circleci/python:3.8.0
@@ -21,7 +24,7 @@ jobs:
           name: All-in-One
           command: |
             cd opsbot
-            pip install -r requirements.txt
+            pip install --user -r requirements.txt
             nosetests --with-xunit
       - store_test_results:
           path: opsbot/nosetests.xml
