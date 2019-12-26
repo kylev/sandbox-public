@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  docker: circleci/docker@0.5.20
+
 jobs:
   rubyapp:
     docker:
@@ -46,9 +49,25 @@ jobs:
       - store_test_results:
           path: ~/results
 
+  rubyapp_package:
+    docker:
+      - image: circleci/python:3.8.0
+    steps:
+      - checkout
+      - docker/build:
+          image: kylev/sandbox-rubyapp
+          path: rubyapp
+
+  opsbot_package:
+    docker:
+      - image: circleci/python:3.8.0
+    steps:
+      - checkout
+
 workflows:
   version: 2
   ci:
     jobs:
       - rubyapp
       - opsbot
+      - rubyapp_package
