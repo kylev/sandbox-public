@@ -1,9 +1,12 @@
-.PHONY: build test test_ruby test_opsbot
+.PHONY: build bundle test test_ruby test_opsbot
 
 DCO = docker-compose
 
 build:
 	$(DCO) build
+
+bundle:
+	$(DCO) run --rm rubyapp bundle install
 
 test: test_ruby test_opsbot
 
