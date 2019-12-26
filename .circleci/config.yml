@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  aws-cli: circleci/aws-cli@0.1.19
   aws-s3: circleci/aws-s3@1.0.12
   docker: circleci/docker@0.5.20
 
@@ -78,15 +79,16 @@ jobs:
           from: ~/lambda.zip
           to: s3://kylev-utility/opsbot/lambda-${CIRCLE_SHA1}.zip
 
-  cd:
+  opsbot_cd:
     docker:
       - image: circleci/python
     steps:
+      - aws-cli/install
+      - aws-cli/setup
       - run:
-          name: TODO Deploy?
+          name: Deploy
           command: |
-            echo Lots to do here.
-
+            aws lambda update-function-code --function-name opsbot_lambda --publish --s3-key opsbot/lambda-${CIRCLE_SHA1}.zip
 
 workflows:
   version: 2
@@ -96,9 +98,10 @@ workflows:
       - opsbot_test
       - rubyapp_package
       - opsbot_package
-      - cd:
+      - opsbot_cd:
+          filters:
+            branches:
+              only: kv_cd
           requires:
-            - rubyapp_test
             - opsbot_test
-            - rubyapp_package
             - opsbot_package
