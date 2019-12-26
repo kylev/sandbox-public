@@ -11,9 +11,11 @@ jobs:
           command: |
             cd rubyapp/
             bundle install
-            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
+
+            mkdir ~/results
+            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/results/rspec.xml
       - store_test_results:
-          path: ~/rspec
+          path: ~/results
 
   opsbot:
     docker:
@@ -25,9 +27,11 @@ jobs:
           command: |
             cd opsbot
             pip install --user -r requirements.txt
-            nosetests --with-xunit
+
+            mkdir ~/results/
+            nosetests --with-xunit --xunit-file ~/results/nose.xml
       - store_test_results:
-          path: opsbot/nosetests.xml
+          path: ~/results
 workflows:
   version: 2
   ci:
