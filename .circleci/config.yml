@@ -7,15 +7,15 @@ jobs:
     steps:
       - checkout
       - run:
-          name: All-in-One
+          name: rspec
           command: |
             cd rubyapp/
             bundle install
 
-            mkdir -p ~/results/rspec
-            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/results/rspec/results.xml
+            mkdir -p ~/results
+            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/results/rspec.xml
       - store_test_results:
-          path: ~/results/rspec/results.xml
+          path: ~/results
 
   opsbot:
     docker:
@@ -23,7 +23,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: All-in-One
+          name: nosetests
           command: |
             cd opsbot
             pip install --user -r requirements.txt
