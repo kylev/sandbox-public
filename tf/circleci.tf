@@ -53,5 +53,5 @@ resource "aws_iam_policy" "circleci_policy" {
 resource "aws_ssm_parameter" "circleci_invoke_url" {
   name  = "/circleci/shared/env/opsbot_api_url"
   type  = "String"
-  value = aws_api_gateway_deployment.opsbot_deployment_test.invoke_url
+  value = "${aws_api_gateway_deployment.opsbot_deployment_test.invoke_url}/opsbot"
 }
