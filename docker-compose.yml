@@ -4,9 +4,7 @@ services:
   rubyapp:
     build:
       context: rubyapp/
-      target: builder
-      args:
-        BUNDLE_ARGS: ""
+      target: dev
     volumes:
       - ./rubyapp:/opt/app
   opsbot:
