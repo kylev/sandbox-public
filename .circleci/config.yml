@@ -105,9 +105,6 @@ jobs:
           key: sandbox-opsbot-package-{{ checksum "opsbot/requirements.txt" }}-{{ checksum "opsbot/setup.py" }}
           paths:
             - opsbot/.package
-      - run:
-          name: Examine
-          command: unzip -l opsbot/lambda.zip
       - aws-s3/copy:
           from: opsbot/lambda.zip
           to: s3://kylev-utility/opsbot/lambda-${CIRCLE_SHA1}.zip
