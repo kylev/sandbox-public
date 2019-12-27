@@ -111,10 +111,3 @@ resource "aws_iam_role_policy_attachment" "opsbot_role_attachment" {
   role       = aws_iam_role.opsbot_role.name
   policy_arn = aws_iam_policy.opsbot_exec_policy.arn
 }
-
-# Publish our presence
-resource "aws_ssm_parameter" "circleci_invoke_url" {
-  name  = "/circleci/shared/env/opsbot_api_url"
-  type  = "SecureString"
-  value = aws_api_gateway_deployment.opsbot_deployment_test.invoke_url
-}
