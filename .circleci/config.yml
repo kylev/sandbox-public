@@ -68,6 +68,7 @@ jobs:
       - setup_env
       - setup_remote_docker
       - aws-ecr/build-and-push-image:
+          dockerfile: rubyapp/Dockerfile
           repo: sandbox-rubyapp
           tag: ${CIRCLE_SHA1}
           path: rubyapp
