@@ -8,4 +8,7 @@ def sns_handler(event, context):
     print(event)
     print(context)
 
-    return '{"a":2}'
+    return {
+        "statusCode": 200,
+        "body": json.dumps({"a": 2})
+    }
