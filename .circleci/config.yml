@@ -39,8 +39,7 @@ jobs:
           name: nosetests
           command: |
             cd opsbot
-            pip install --user -r requirements.txt
-            pip install --user -e .
+            pip install --user -r requirements.txt '.[development]'
 
             mkdir -p ~/results/nose
             nosetests --with-xunit --xunit-file ~/results/nose.xml
