@@ -82,7 +82,7 @@ jobs:
           name: Examine
           command: unzip -l ~/lambda.zip
       - aws-s3/copy:
-          from: ~/lambda.zip
+          from: opsbot/lambda.zip
           to: s3://kylev-utility/opsbot/lambda-${CIRCLE_SHA1}.zip
 
   opsbot_cd:
