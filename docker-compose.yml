@@ -4,6 +4,8 @@ services:
   rubyapp:
     build:
       context: rubyapp/
+      args:
+        WITHOUT_GROUPS: none
     volumes:
       - ./rubyapp:/opt/app
   opsbot:
