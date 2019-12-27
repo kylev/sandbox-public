@@ -1,4 +1,5 @@
 import boto3
+import json
 
 def thingy():
     return 42
