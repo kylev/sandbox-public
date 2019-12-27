@@ -107,7 +107,6 @@ workflows:
             branches:
               only:
                 - master
-                - /^kv_/
           requires:
             - opsbot_test
             - opsbot_package
