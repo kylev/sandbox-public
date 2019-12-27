@@ -20,6 +20,7 @@ jobs:
     docker:
       - image: circleci/ruby:2.6.5
     steps:
+      - setup_env
       - checkout
       - restore_cache:
           key: sandbox-rubyapp-{{ checksum "rubyapp/Gemfile.lock" }}
@@ -42,6 +43,7 @@ jobs:
     docker:
       - image: circleci/python:3.8.0
     steps:
+      - setup_env
       - checkout
       - restore_cache:
           key: sandbox-opsbot-{{ checksum "opsbot/requirements.txt" }}-{{ checksum "opsbot/setup.py" }}
@@ -72,10 +74,20 @@ jobs:
           path: rubyapp
       - run: curl -XPOST ${OPSBOT_API_URL}
 
+  rubyapp_cd:
+    docker:
+      - image: circleci/python:3
+    steps:
+      - setup_env
+      - run:
+          name: Deploy
+          command: curl -XPOST ${OPSBOT_API_URL}
+
   opsbot_package:
     docker:
       - image: circleci/python:3
     steps:
+      - setup_env
       - checkout
       - restore_cache:
           key: sandbox-opsbot-package-{{ checksum "opsbot/requirements.txt" }}-{{ checksum "opsbot/setup.py" }}
@@ -110,8 +122,17 @@ workflows:
   ci:
     jobs:
       - rubyapp_test
-      - opsbot_test
       - rubyapp_package
+      - rubyapp_cd:
+          filters:
+            branches:
+              only:
+                - master
+                - /^kv_/
+          requires:
+            - rubyapp_test
+            - rubyapp_package
+      - opsbot_test
       - opsbot_package
       - opsbot_cd:
           filters:
