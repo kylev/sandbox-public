@@ -11,7 +11,7 @@ bundle:
 test: test_ruby test_opsbot
 
 test_ruby:
-	$(DCO) run --rm rubyapp bundle exec rspec
+	$(DCO) run --rm rubyapp ./bin/rspec
 
 test_opsbot:
 	$(DCO) run --rm opsbot nosetests

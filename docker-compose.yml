@@ -4,6 +4,7 @@ services:
   rubyapp:
     build:
       context: rubyapp/
+      target: builder
       args:
         WITHOUT_GROUPS: none
     volumes:
@@ -11,7 +12,5 @@ services:
   opsbot:
     build:
       context: opsbot/
-      args:
-        DEVELOPER_MODE: "true"
     volumes:
       - ./opsbot:/opt/app

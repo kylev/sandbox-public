@@ -72,7 +72,12 @@ jobs:
           repo: sandbox-rubyapp
           tag: ${CIRCLE_SHA1}
           path: rubyapp
-      - run: curl -XPOST ${OPSBOT_API_URL}
+      - aws-ecr/build-and-push-image:
+          dockerfile: rubyapp/Dockerfile
+          extra-build-args: --target builder
+          repo: sandbox-rubyapp
+          tag: ${CIRCLE_SHA1}-dev
+          path: rubyapp
 
   rubyapp_cd:
     docker:
