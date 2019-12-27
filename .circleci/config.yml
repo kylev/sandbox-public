@@ -62,11 +62,9 @@ jobs:
           path: ~/results
 
   rubyapp_package:
-    docker:
-      - image: circleci/python:3
+    executor: aws-ecr/default
     steps:
       - setup_env
-      - setup_remote_docker
       - aws-ecr/build-and-push-image:
           dockerfile: rubyapp/Dockerfile
           repo: sandbox-rubyapp
