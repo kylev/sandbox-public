@@ -51,7 +51,14 @@ data "aws_iam_policy_document" "circleci" {
   statement {
     sid       = "CdEcrArtifacts"
     actions   = [
-      "ecr:GetAuthorizationToken"
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:Describe*",
+      "ecr:Get*",
+      "ecr:InitiateLayerUpload",
+      "ecr:List*",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart",
     ]
     resources = ["*"]
   }
