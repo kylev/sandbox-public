@@ -6,7 +6,7 @@ services:
       context: rubyapp/
       target: builder
       args:
-        WITHOUT_GROUPS: none
+        BUNDLE_ARGS: ""
     volumes:
       - ./rubyapp:/opt/app
   opsbot:
