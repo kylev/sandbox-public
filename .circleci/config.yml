@@ -130,7 +130,7 @@ workflows:
             branches:
               only:
                 - master
-                - /^kv_/
+                - /^kv_.*/
           requires:
             - rubyapp_test
             - rubyapp_package
