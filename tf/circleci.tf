@@ -47,6 +47,14 @@ data "aws_iam_policy_document" "circleci" {
       "arn:aws:ssm:*:*:parameter/circleci/sandbox-public/*",
     ]
   }
+
+  statement {
+    sid       = "CdEcrArtifacts"
+    actions   = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "circleci_policy" {
@@ -63,7 +71,7 @@ resource "aws_ssm_parameter" "circleci_invoke_url" {
 }
 
 resource "aws_ssm_parameter" "circleci_ecr" {
-  name  = "/circleci/sandbox-rubyapp/env/AWS_ECR_ACCOUNT_URL"
+  name  = "/circleci/sandbox-public/env/AWS_ECR_ACCOUNT_URL"
   type  = "SecureString"
   value = split("/", aws_ecr_repository.rubyapp_ecr_repo.repository_url)[0]
 }

@@ -13,7 +13,7 @@ commands:
           command: |
             sudo curl -sSL -o /usr/local/bin/chamber https://github.com/segmentio/chamber/releases/download/v2.3.2/chamber-v2.3.2-linux-amd64
             sudo chmod 755 /usr/local/bin/chamber
-            chamber export --format dotenv circleci/shared/env | sed -e 's/^/export /' >> $BASH_ENV
+            chamber export --format dotenv circleci/shared/env circleci/${CIRCLE_PROJECT_REPONAME}/env | sed -e 's/^/export /' >> $BASH_ENV
 
 jobs:
   rubyapp_test:
