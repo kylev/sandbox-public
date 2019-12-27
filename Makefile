@@ -6,7 +6,7 @@ build:
 	$(DCO) build
 
 bundle:
-	$(DCO) run --rm rubyapp bundle install
+	$(DCO) run --rm rubyapp bundle install --binstubs
 
 test: test_ruby test_opsbot
 
