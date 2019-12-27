@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "circleci" {
   statement {
-    sid = "OpsbotArtifactsBucket"
+    sid = "CdArtifactsBucket"
 
     actions = [
       "s3:GetBucketLocation",
@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "circleci" {
   }
 
   statement {
-    sid = "OpsbotArtifactsKeyspace"
+    sid = "CdArtifactsKeyspace"
 
     actions = [
       "s3:GetObject",
@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "circleci" {
   }
 
   statement {
-    sid = "OpsbotDeploy"
+    sid = "DeployFunction"
 
     actions = [
       "lambda:UpdateFunctionCode",
