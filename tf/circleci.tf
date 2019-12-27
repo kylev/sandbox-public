@@ -37,8 +37,8 @@ data "aws_iam_policy_document" "circleci" {
   }
 
   statement {
-    sid       = "CdConfigVars"
-    actions   = [
+    sid = "CdConfigVars"
+    actions = [
       "ssm:DescribeParameters",
       "ssm:GetParametersByPath",
     ]
@@ -49,8 +49,8 @@ data "aws_iam_policy_document" "circleci" {
   }
 
   statement {
-    sid       = "CdEcrArtifacts"
-    actions   = [
+    sid = "CdEcrArtifacts"
+    actions = [
       "ecr:GetAuthorizationToken",
       "ecr:BatchCheckLayerAvailability",
       "ecr:GetDownloadUrlForLayer",

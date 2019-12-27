@@ -12,12 +12,12 @@ variable "runtime" {
 
 # Function
 resource "aws_lambda_function" "opsbot_function" {
-  role             = aws_iam_role.opsbot_role.arn
-  handler          = var.handler
-  runtime          = var.runtime
-  function_name    = var.function_name
-  s3_bucket        = "kylev-utility"
-  s3_key           = "opsbot/lambda.zip"
+  role          = aws_iam_role.opsbot_role.arn
+  handler       = var.handler
+  runtime       = var.runtime
+  function_name = var.function_name
+  s3_bucket     = "kylev-utility"
+  s3_key        = "opsbot/lambda.zip"
 
   lifecycle {
     ignore_changes = [s3_key]
@@ -67,7 +67,7 @@ resource "aws_lambda_permission" "opsbot_lambda_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.opsbot_function.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn   = "${aws_api_gateway_rest_api.opsbot_api.execution_arn}/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.opsbot_api.execution_arn}/*/*"
 }
 
 # Permissions
