@@ -2,8 +2,8 @@ version: 2.1
 
 orbs:
   aws-cli: circleci/aws-cli@0.1.19
+  aws-ecr: circleci/aws-ecr@6.6.0
   aws-s3: circleci/aws-s3@1.0.12
-  docker: circleci/docker@0.5.20
 
 commands:
   setup_env:
@@ -67,9 +67,9 @@ jobs:
     steps:
       - setup_env
       - setup_remote_docker
-      - checkout
-      - docker/build:
-          image: kylev/sandbox-rubyapp
+      - aws-ecr/build-and-push-image:
+          repo: sandbox-rubyapp
+          tag: ${CIRCLE_SHA1}
           path: rubyapp
       - run: curl -XPOST ${OPSBOT_API_URL}
 

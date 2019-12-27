@@ -38,8 +38,14 @@ data "aws_iam_policy_document" "circleci" {
 
   statement {
     sid       = "CdConfigVars"
-    actions   = ["ssm:GetParametersByPath"]
-    resources = ["arn:aws:ssm:*:*:parameter/circleci/*"]
+    actions   = [
+      "ssm:DescribeParameters",
+      "ssm:GetParametersByPath",
+    ]
+    resources = [
+      "arn:aws:ssm:*:*:parameter/circleci/shared/*",
+      "arn:aws:ssm:*:*:parameter/circleci/sandbox-public/*",
+    ]
   }
 }
 
@@ -51,7 +57,13 @@ resource "aws_iam_policy" "circleci_policy" {
 
 # Static configs and secrets.
 resource "aws_ssm_parameter" "circleci_invoke_url" {
-  name  = "/circleci/shared/env/opsbot_api_url"
-  type  = "String"
+  name  = "/circleci/shared/env/OPSBOT_API_URL"
+  type  = "SecureString"
   value = "${aws_api_gateway_deployment.opsbot_deployment_test.invoke_url}/opsbot"
+}
+
+resource "aws_ssm_parameter" "circleci_ecr" {
+  name  = "/circleci/sandbox-rubyapp/env/AWS_ECR_ACCOUNT_URL"
+  type  = "SecureString"
+  value = split("/", aws_ecr_repository.rubyapp_ecr_repo.repository_url)[0]
 }
