@@ -74,7 +74,7 @@ jobs:
           path: rubyapp
       - aws-ecr/build-and-push-image:
           dockerfile: rubyapp/Dockerfile
-          extra-build-args: --target dev
+          extra-build-args: --target builder --build-arg bundler_args=""
           repo: sandbox-rubyapp
           tag: ${CIRCLE_SHA1}-dev
           path: rubyapp

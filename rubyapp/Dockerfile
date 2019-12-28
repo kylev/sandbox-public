@@ -1,21 +1,17 @@
 FROM ruby:2.6.5 AS builder
 
-WORKDIR /app
+WORKDIR /opt/app
 COPY Gemfile* ./
 
-RUN bundle install --jobs 4 --retry 3 --without development test
+ARG bundler_args="--without development test"
+RUN \
+        bundle install --jobs 4 --retry 3 $bundler_args && \
+        rm -rf /usr/local/bundle/cache
+
 COPY . ./
 
-FROM ruby:2.6.5 AS dev
+FROM ruby:2.6.5-slim
 
-WORKDIR /app
+WORKDIR /opt/app
 COPY --from=builder /usr/local/bundle /usr/local/bundle/
-COPY --from=builder /app ./
-
-RUN bundle install --jobs 4 --retry 3 --with development test
-
-FROM ruby:2.6.5-slim AS slim
-
-WORKDIR /app
-COPY --from=builder /usr/local/bundle /usr/local/bundle/
-COPY --from=builder /app ./
+COPY --from=builder /opt/app ./
