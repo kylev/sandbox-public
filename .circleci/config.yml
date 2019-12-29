@@ -63,7 +63,18 @@ jobs:
       - store_test_results:
           path: ~/results
 
-  rubyapp_package:
+  rubyapp_devbuild:
+    executor: aws-ecr/default
+    steps:
+      - setup_env
+      - aws-ecr/build-and-push-image:
+          dockerfile: rubyapp/Dockerfile
+          extra-build-args: --target builder --build-arg bundler_args=""
+          repo: sandbox-rubyapp
+          tag: dev-${CIRCLE_SHA1},dev-${CIRCLE_BRANCH}
+          path: rubyapp
+
+  rubyapp_cd:
     executor: aws-ecr/default
     steps:
       - setup_env
@@ -72,18 +83,6 @@ jobs:
           repo: sandbox-rubyapp
           tag: ${CIRCLE_SHA1}
           path: rubyapp
-      - aws-ecr/build-and-push-image:
-          dockerfile: rubyapp/Dockerfile
-          extra-build-args: --target builder --build-arg bundler_args=""
-          repo: sandbox-rubyapp
-          tag: ${CIRCLE_SHA1}-dev
-          path: rubyapp
-
-  rubyapp_cd:
-    docker:
-      - image: circleci/python:3
-    steps:
-      - setup_env
       - run:
           name: Deploy
           command: curl -XPOST ${OPSBOT_API_URL}
@@ -124,7 +123,9 @@ workflows:
   ci:
     jobs:
       - rubyapp_test
-      - rubyapp_package
+      - rubyapp_devbuild:
+          requires:
+            - rubyapp_test
       - rubyapp_cd:
           filters:
             branches:
@@ -133,7 +134,6 @@ workflows:
                 - /^kv_.*/
           requires:
             - rubyapp_test
-            - rubyapp_package
       - opsbot_test
       - opsbot_package
       - opsbot_cd:
